@@ -46,9 +46,8 @@ class TaskController extends Controller
     {
         $user = auth()->user();
 
-        $request = $request->merge(
-            ['user_id' => $user->id, 'datetime' => str_replace('T', ' ', $request->datetime)]
-        );
+        $request->merge(['user_id' => $user->id, 'datetime' => str_replace('T', ' ', $request->datetime)]);
+
         $this->taskRepository->create($request->all());
 
         return redirect('tasks')->banner(__('Great! You have created the task :team.', ['team' => $user->name]),);
@@ -76,9 +75,7 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, $id)
     {
-        $request = $request->merge(
-            ['user_id' => auth()->user()->id, 'datetime' => str_replace('T', ' ', $request->datetime)]
-        );
+        $request->merge(['user_id' => auth()->user()->id, 'datetime' => str_replace('T', ' ', $request->datetime)]);
 
         $this->taskRepository->update($id, $request->all());
 

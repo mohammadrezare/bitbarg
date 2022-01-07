@@ -26,7 +26,7 @@ Route::post('login', 'App\Http\Controllers\Api\AuthController@login');
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('list', 'App\Http\Controllers\Api\TaskController@index');
     Route::post('store', 'App\Http\Controllers\Api\TaskController@store');
-    Route::patch('update', 'App\Http\Controllers\Api\TaskController@update');
-    Route::delete('delete', 'App\Http\Controllers\Api\TaskController@destroy');
+    Route::patch('update/{id}', 'App\Http\Controllers\Api\TaskController@update');
+    Route::delete('delete/{id}', 'App\Http\Controllers\Api\TaskController@destroy');
 });
 

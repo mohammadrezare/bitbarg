@@ -36,8 +36,8 @@ class TaskController extends Controller
     public function store(TaskRequest $request)
     {
         $user = auth()->user();
-        
-        $request = $request->merge(['user_id' => $user->id]);
+
+        $request->merge(['user_id' => $user->id]);
 
         $this->taskRepository->create($request->all());
 
@@ -53,7 +53,7 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, $id)
     {
-        $request = $request->merge(['user_id' => auth()->user()->id]);
+        $request->merge(['user_id' => auth()->user()->id]);
 
         $this->taskRepository->update($id, $request->all());
 
