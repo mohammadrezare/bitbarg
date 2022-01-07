@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('register', 'App\Http\Controllers\Api\AuthController@register');
-Route::post('login', 'App\Http\Controllers\Api\AuthController@login');
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
-Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::get('list', 'App\Http\Controllers\Api\TaskController@index');
-    Route::post('store', 'App\Http\Controllers\Api\TaskController@store');
-    Route::patch('update/{id}', 'App\Http\Controllers\Api\TaskController@update');
-    Route::delete('delete/{id}', 'App\Http\Controllers\Api\TaskController@destroy');
+Route::group(['middleware' => ['jwt.verify']], function () {
+    Route::get('list', [TaskController::class, 'index']);
+    Route::post('store', [TaskController::class, 'store']);
+    Route::patch('update/{id}', [TaskController::class, 'update']);
+    Route::delete('delete/{id}', [TaskController::class, 'destroy']);
 });
 
