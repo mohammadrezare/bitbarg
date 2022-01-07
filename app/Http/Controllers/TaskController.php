@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Repository\Task\TaskRepositoryInterface;
 use App\Models\Task;
+use App\Http\Requests\TaskRequest;
 
 class TaskController extends Controller
 {
@@ -42,19 +42,16 @@ class TaskController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        $request->validate([
-            'title' => 'required|max:400|min:1',
-            'description' => 'required|max:1200|min:1',
-            'datetime' => 'required|date',
-        ]);
-        $request = request()->merge(
-            ['user_id' => auth()->id(), 'datetime' => str_replace('T', ' ', request()->datetime)]
+        $user = auth()->user();
+
+        $request = $request->merge(
+            ['user_id' => $user->id, 'datetime' => str_replace('T', ' ', $request->datetime)]
         );
         $this->taskRepository->create($request->all());
 
-        return redirect('tasks')->banner(__('Great! You have created the task :team.', ['team' => auth()->user()->name]),);
+        return redirect('tasks')->banner(__('Great! You have created the task :team.', ['team' => $user->name]),);
     }
 
     /**
@@ -77,15 +74,10 @@ class TaskController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
-        $request->validate([
-            'title' => 'required|max:400',
-            'description' => 'required|max:1200',
-            'datetime' => 'required|date',
-        ]);
-        $request = request()->merge(
-            ['user_id' => auth()->id(), 'datetime' => str_replace('T', ' ', request()->datetime)]
+        $request = $request->merge(
+            ['user_id' => auth()->user()->id, 'datetime' => str_replace('T', ' ', $request->datetime)]
         );
 
         $this->taskRepository->update($id, $request->all());

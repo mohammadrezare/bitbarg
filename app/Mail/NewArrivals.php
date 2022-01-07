@@ -34,7 +34,7 @@ class NewArrivals extends Mailable
             ->subject('Notify about your task')
             ->from('bitbarg@company.com', 'Bitbarg')
             ->with([
-                'user'=> $this->user,
+                'user' => $this->user,
                 'new_arrival' => $this->new_arrival,
             ]);
     }

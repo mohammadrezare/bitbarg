@@ -23,7 +23,7 @@ class NotifyUsers extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Notify users';
 
     /**
      * Create a new command instance.
@@ -51,7 +51,6 @@ class NotifyUsers extends Command
                     $task->user->email,
                     new NewArrivals($task->user, $task)
                 ));
-
                 Task::whereId($task->id)->update(['status' => 'done']);
             });
         }

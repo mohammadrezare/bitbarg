@@ -4,20 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use JWTAuth;
+use App\Http\Requests\Api\RegisterJWTAuthRequest;
+use App\Http\Requests\Api\LoginJWTAuthRequest;
 
 class AuthController extends Controller
 {
-    public $loginAfterSignUp = true;
 
-    public function register(Request $request)
+    public function register(RegisterJWTAuthRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:200',
-            'email' => 'required|max:200|unique:users,email',
-            'password' => 'required|max:8',
-        ]);
         $user = \App\Models\User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -29,13 +24,8 @@ class AuthController extends Controller
         return $this->respondWithToken($user);
     }
 
-    public function login(Request $request)
+    public function login(LoginJWTAuthRequest $request)
     {
-        $request->validate([
-            'email' => 'required|max:100',
-            'password' => 'required|max:200',
-        ]);
-
         $credentials = $request->only(['email', 'password']);
 
         if (! auth()->attempt($credentials)) {

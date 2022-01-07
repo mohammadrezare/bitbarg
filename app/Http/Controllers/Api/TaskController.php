@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Repository\Task\TaskRepositoryInterface;
+use App\Http\Requests\TaskRequest;
 
 class TaskController extends Controller
 {
@@ -33,18 +33,15 @@ class TaskController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        $request->validate([
-            'title' => 'required|max:400|min:1',
-            'description' => 'required|max:1200|min:1',
-            'datetime' => 'required|date',
-        ]);
-        $request = request()->merge(['user_id' => auth()->id()]);
+        $user = auth()->user();
+        
+        $request = $request->merge(['user_id' => $user->id]);
 
         $this->taskRepository->create($request->all());
 
-        return response()->json(['text' =>  __('Great! You have created the task :team.', ['team' => auth()->user()->name])]);
+        return response()->json(['text' =>  __('Great! You have created the task :team.', ['team' => $user->name])]);
     }
 
     /**
@@ -54,14 +51,9 @@ class TaskController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
-        $request->validate([
-            'title' => 'required|max:400|min:1',
-            'description' => 'required|max:1200|min:1',
-            'datetime' => 'required|date',
-        ]);
-        $request = request()->merge(['user_id' => auth()->id()]);
+        $request = $request->merge(['user_id' => auth()->user()->id]);
 
         $this->taskRepository->update($id, $request->all());
 

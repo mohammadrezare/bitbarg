@@ -9,7 +9,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'description', 'datetime'];
+    protected $fillable = ['user_id', 'title', 'description', 'datetime', 'status'];
     protected $casts = [
         'datetime' => 'datetime:Y-m-d H:i',
     ];
